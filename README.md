@@ -1,14 +1,11 @@
 # Sudoku Solver
-
 This is a Sudoku solver program implemented in Python using the Pygame library for the graphical user interface (GUI). It allows you to play Sudoku puzzles by entering numbers and provides a solve feature to automatically solve the puzzles.
 
 ## Requirements
-
 - Python 3.x
 - Pygame library
 
 ## Usage
-
 1. Install the required dependencies by running the following command:
    <br>-pip install pygame
 2. Run the GUI.py file to start the Sudoku solver program:
@@ -17,3 +14,6 @@ This is a Sudoku solver program implemented in Python using the Pygame library f
 5. Press the Space key to solve the Sudoku puzzle automatically. The program will display the solved puzzle on the board.
 6. If the puzzle is solved correctly, the program will display "Game over" on the console.
 7. You can exit the program by closing the Pygame window or pressing the QUIT button.
+
+## Contributing
+Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
