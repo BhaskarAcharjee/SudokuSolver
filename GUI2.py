@@ -41,9 +41,22 @@ class SudokuGUI:
                 y1 = i * 50
                 x2 = x1 + 50
                 y2 = y1 + 50
+
+                # Draw the grid lines with thicker lines for the 3x3 grid
+                if i % 3 == 0:
+                    self.canvas.create_line(x1, y1, x2, y1, width=2)  # Top horizontal line
+                else:
+                    self.canvas.create_line(x1, y1, x2, y1)  # Top horizontal line
+
+                if j % 3 == 0:
+                    self.canvas.create_line(x1, y1, x1, y2, width=2)  # Left vertical line
+                else:
+                    self.canvas.create_line(x1, y1, x1, y2)  # Left vertical line
+
                 self.canvas.create_rectangle(x1, y1, x2, y2)
                 if self.board[i][j] != 0:
                     self.canvas.create_text(x1 + 25, y1 + 25, text=self.board[i][j], font=("Arial", 16))
+
 
     def load_manual_data(self):
         # Open a new window to input manual data
@@ -98,10 +111,24 @@ class SudokuGUI:
         submit_button.pack()
 
     def load_random_data(self):
-        self.board = self.generate_random_board()
-        self.draw_numbers()
+        difficulty_window = tk.Toplevel(self.root)
+        difficulty_window.title("Select Difficulty")
 
-    def generate_random_board(self):
+        def select_difficulty(difficulty):
+            difficulty_window.destroy()
+            self.board = self.generate_random_board(difficulty)
+            self.draw_numbers()
+
+        easy_button = tk.Button(difficulty_window, text="Easy", command=lambda: select_difficulty("easy"))
+        easy_button.pack(side=tk.LEFT)
+
+        medium_button = tk.Button(difficulty_window, text="Medium", command=lambda: select_difficulty("medium"))
+        medium_button.pack(side=tk.LEFT)
+
+        hard_button = tk.Button(difficulty_window, text="Hard", command=lambda: select_difficulty("hard"))
+        hard_button.pack(side=tk.LEFT)
+
+    def generate_random_board(self, difficulty):
         def is_valid(board, row, col, num):
             for i in range(9):
                 if board[row][i] == num:
@@ -137,8 +164,14 @@ class SudokuGUI:
         board = [[0] * 9 for _ in range(9)]
         solve_sudoku(board)
 
-        # Randomly remove some numbers from the board
-        num_to_remove = random.randint(30, 60)
+        # Adjust the number of filled cells based on the difficulty level
+        if difficulty == "easy":
+            num_to_remove = random.randint(35, 45)
+        elif difficulty == "medium":
+            num_to_remove = random.randint(46, 54)
+        elif difficulty == "hard":
+            num_to_remove = random.randint(55, 60)
+
         cells = [(i, j) for i in range(9) for j in range(9)]
         random.shuffle(cells)
         for i in range(num_to_remove):
