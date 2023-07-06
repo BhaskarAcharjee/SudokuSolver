@@ -1,13 +1,14 @@
 import random
 import tkinter as tk
 from tkinter import messagebox
+import time
 
 class SudokuGUI:
     def __init__(self):
         self.board = [[0] * 9 for _ in range(9)]
         self.root = tk.Tk()
         self.root.title("Sudoku Solver")
-        
+
         self.frame = tk.Frame(self.root)
         self.frame.pack()
 
@@ -31,6 +32,13 @@ class SudokuGUI:
 
         self.solve_button = tk.Button(self.frame, text="Solve Sudoku", command=self.solve_sudoku)
         self.solve_button.pack(side=tk.LEFT)
+
+        self.timer_label = tk.Label(self.root, text="Timer: 00:00:00", font=("Arial", 14))
+        self.timer_label.pack()
+
+        self.start_time = None
+        self.elapsed_time = 0
+        self.timer_running = False
 
         self.create_board()
 
@@ -235,7 +243,30 @@ class SudokuGUI:
         self.create_board()
 
     def run(self):
+        self.start_timer()
         self.root.mainloop()
+
+    def start_timer(self):
+        self.start_time = time.time()
+        self.timer_running = True
+        self.update_timer()
+
+    def stop_timer(self):
+        self.timer_running = False
+
+    def update_timer(self):
+        if self.timer_running:
+            elapsed_time = time.time() - self.start_time
+            self.elapsed_time = elapsed_time
+            timer_text = self.format_time(elapsed_time)
+            self.timer_label.config(text=f"Timer: {timer_text}")
+            self.root.after(1000, self.update_timer)
+
+    def format_time(self, elapsed_time):
+        hours = int(elapsed_time // 3600)
+        minutes = int((elapsed_time % 3600) // 60)
+        seconds = int(elapsed_time % 60)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
 if __name__ == "__main__":
