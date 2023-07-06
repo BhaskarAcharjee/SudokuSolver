@@ -226,16 +226,32 @@ class SudokuGUI:
 
             return True
 
-        for row in range(9):
-            for col in range(9):
-                if self.board[row][col] == 0:
-                    for num in range(1, 10):
-                        if is_valid(row, col, num):
-                            self.board[row][col] = num
-                            if self.solve_sudoku_util():
-                                return True
-                            self.board[row][col] = 0
-                    return False
+        def animate_solve_sudoku(row, col):
+            if col == 9:
+                col = 0
+                row += 1
+            if row == 9:
+                return True
+
+            if self.board[row][col] != 0:
+                return animate_solve_sudoku(row, col + 1)
+
+            for num in range(1, 10):
+                if is_valid(row, col, num):
+                    self.board[row][col] = num
+                    self.draw_numbers()
+                    self.root.update()
+
+                    if animate_solve_sudoku(row, col + 1):
+                        return True
+
+                    self.board[row][col] = 0
+                    self.draw_numbers()
+                    self.root.update()
+
+            return False
+
+        animate_solve_sudoku(0, 0)
         return True
 
     def draw_numbers(self):
